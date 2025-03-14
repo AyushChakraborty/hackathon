@@ -23,4 +23,6 @@ def submit_test(test_id):
     }
 
     db.responses.insert_one(submission)
+    
+    print("Received answers:", data)
     return jsonify({"message": "Submission received"}), 200
