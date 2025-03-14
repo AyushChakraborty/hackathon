@@ -11,6 +11,7 @@ if (!testId) {
 fetch(`${apiBaseUrl}/test/${testId}`)
   .then((res) => {
     if (!res.ok) {
+      console.error("Server returned status:", res.status);
       throw new Error("Test not found or server error");
     }
     return res.json();
@@ -19,33 +20,42 @@ fetch(`${apiBaseUrl}/test/${testId}`)
     document.getElementById("test-title").textContent = test.title;
 
     const questionsContainer = document.getElementById("questions-container");
+
     test.questions.forEach((q) => {
       const questionDiv = document.createElement("div");
       questionDiv.classList.add("question");
 
       const label = document.createElement("label");
       label.textContent = q.question;
+      label.setAttribute("for", q.id);
       questionDiv.appendChild(label);
 
       if (q.type === "mcq") {
-        q.options.forEach((option) => {
+        q.options.forEach((option, idx) => {
           const radio = document.createElement("input");
           radio.type = "radio";
           radio.name = q.id;
           radio.value = option;
+          radio.id = `${q.id}_option_${idx}`;
 
-          const optionLabel = document.createElement("span");
+          const optionLabel = document.createElement("label");
           optionLabel.textContent = option;
+          optionLabel.setAttribute("for", radio.id);
 
           const wrapper = document.createElement("div");
+          wrapper.classList.add("option");
           wrapper.appendChild(radio);
           wrapper.appendChild(optionLabel);
+
           questionDiv.appendChild(wrapper);
         });
       } else if (q.type === "text") {
-        const input = document.createElement("textarea");
-        input.name = q.id;
-        questionDiv.appendChild(input);
+        const textarea = document.createElement("textarea");
+        textarea.name = q.id;
+        textarea.id = q.id;
+        textarea.rows = 4;
+        textarea.cols = 50;
+        questionDiv.appendChild(textarea);
       }
 
       questionsContainer.appendChild(questionDiv);
