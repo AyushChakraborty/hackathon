@@ -40,6 +40,9 @@ function loadProgress() {
 // ✅ Function to handle fullscreen exit
 function handleFullscreenExit() {
   if (!document.fullscreenElement) {
+    document.querySelectorAll("input, textarea, button, select").forEach(el => {
+    el.disabled = true;
+    });
     saveProgress();  // ✅ Auto-save progress when exiting fullscreen
     alert("You have exited fullscreen mode! Click 'Restart Test' to continue.");
 
@@ -67,6 +70,9 @@ function handleFullscreenExit() {
       } else if (docElem.msRequestFullscreen) {
         docElem.msRequestFullscreen();
       }
+      document.querySelectorAll("input, textarea, button, select").forEach(el => {
+      el.disabled = false;
+      });
 
      // Remove button after entering fullscreen
       restartButton.remove();
