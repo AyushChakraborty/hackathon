@@ -7,6 +7,20 @@ api = Blueprint("api", __name__)
 
 db.tests.replace_one({"test_id": test_data["test_id"]}, test_data, upsert=True)
 
+@api.route("/login", methods=["POST"])
+def login():
+    data = request.json
+    username = data.get("username")
+    password = data.get("password")
+
+    user = db["users"].find_one({"username": username})
+
+    if user and user["password"] == password:
+        return jsonify({"message": "Login successful", "token": "dummy-token"}), 200
+    else:
+        return jsonify({"message": "Invalid credentials"}), 401
+
+
 @api.route("/test/<test_id>", methods=["GET"])
 def get_test(test_id):
     test = db.tests.find_one({"test_id": test_id}, {"_id": 0})
@@ -39,3 +53,8 @@ def log_behavior():
     print("Behavioral Data Received:", activityData)
     # You can process/store here or hand off to another service
     return jsonify({"status": "success"}), 200
+
+@api.route("/tests", methods=["GET"])
+def get_all_tests():
+    tests = list(db.tests.find({}, {"_id": 0, "test_id": 1, "title": 1}))
+    return jsonify(tests), 200
