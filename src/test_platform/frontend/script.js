@@ -9,8 +9,47 @@ if (!testId) {
   alert("Missing test ID in URL. Use ?test_id=your_test_id");
   throw new Error("Missing test_id");
 }
+function startTest() {
+  return new Promise((resolve) => {
+    // Create "Start Test" button
+    const fullScreenButton = document.createElement("button");
+    fullScreenButton.textContent = "Start Test (Full Screen)";
+    fullScreenButton.id = "fullscreen-button";
+    fullScreenButton.style.padding = "12px 20px";
+    fullScreenButton.style.fontSize = "18px";
+    fullScreenButton.style.margin = "20px auto";
+    fullScreenButton.style.display = "block";
+    fullScreenButton.style.cursor = "pointer";
 
-fetch(`${apiBaseUrl}/test/${testId}`)
+    document.body.appendChild(fullScreenButton);
+
+    // Button click event
+    fullScreenButton.addEventListener("click", function () {
+      // Enter fullscreen mode
+      const docElem = document.documentElement;
+      if (docElem.requestFullscreen) {
+        docElem.requestFullscreen();
+      } else if (docElem.mozRequestFullScreen) {
+        docElem.mozRequestFullScreen();
+      } else if (docElem.webkitRequestFullscreen) {
+        docElem.webkitRequestFullscreen();
+      } else if (docElem.msRequestFullscreen) {
+        docElem.msRequestFullscreen();
+      }
+
+     // Remove button after entering fullscreen
+      fullScreenButton.remove();
+
+      // ✅ Resolve the promise to continue execution
+      resolve();
+    });
+  });
+}
+
+// ✅ Only fetch the test **after** the promise resolves
+startTest().then(() => {
+  return fetch(`${apiBaseUrl}/test/${testId}`);
+})
   .then((res) => {
     if (!res.ok) {
       console.error("Server returned status:", res.status);
@@ -63,12 +102,15 @@ fetch(`${apiBaseUrl}/test/${testId}`)
       questionsContainer.appendChild(questionDiv);
     });
   })
+
+
   .catch((err) => {
     console.error("Failed to fetch test:", err);
     document.getElementById("questions-container").innerHTML = `
       <p style="color: red;">Failed to load the test. Please check the test ID.</p>
     `;
   });
+
 
 const form = document.getElementById("test-form");
 
