@@ -75,6 +75,7 @@ startTest().then(() => {
         q.options.forEach((option, idx) => {
           const radio = document.createElement("input");
           radio.type = "radio";
+          radio.className = q.type;
           radio.name = q.id;
           radio.value = option;
           radio.id = `${q.id}_option_${idx}`;
@@ -92,6 +93,7 @@ startTest().then(() => {
         });
       } else if (q.type === "text") {
         const textarea = document.createElement("textarea");
+        textarea.className = q.type;
         textarea.name = q.id;
         textarea.id = q.id;
         textarea.rows = 4;
