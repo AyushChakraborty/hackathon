@@ -3,20 +3,15 @@ export function behavior() {
   let startTime = null;
   let keyTimestamps = [];
   let keystrokeLatencies = [];
-  let lastActivityTime = null;
-  let idleTime = 0;
 
   const apiBaseUrl = "http://127.0.0.1:5000";
   let tracking = false;
-  let idleInterval = null;
 
   function resetData() {
     wordCount = 0;
     keyTimestamps = [];
     keystrokeLatencies = [];
-    idleTime = 0;
     startTime = Date.now();
-    lastActivityTime = Date.now();
   }
 
   function startTracking() {
@@ -26,8 +21,6 @@ export function behavior() {
 
     document.addEventListener("keydown", keydownHandler);
     document.addEventListener("input", inputHandler);
-
-    idleInterval = setInterval(idleTimeHandler, 5000);
   }
 
   function stopTracking() {
@@ -37,10 +30,11 @@ export function behavior() {
     document.removeEventListener("keydown", keydownHandler);
     document.removeEventListener("input", inputHandler);
 
-    clearInterval(idleInterval);
-
     sendBehaviorData(); // Send data immediately on focusout
   }
+
+  //for now only tracking wpm and keystroke latency, later will take input 
+  //from image model as another feature and use that all to predict
 
   function keydownHandler(e) {
     const now = Date.now();
@@ -50,7 +44,6 @@ export function behavior() {
         const latency = now - keyTimestamps[keyTimestamps.length - 2];
         keystrokeLatencies.push(latency);
       }
-      lastActivityTime = now;
     }
   }
 
@@ -60,29 +53,21 @@ export function behavior() {
       .split(/\s+/)
       .filter((w) => w !== "");
     wordCount = words.length;
-    lastActivityTime = Date.now();
-  }
-
-  function idleTimeHandler() {
-    const now = Date.now();
-    if (now - lastActivityTime > 5000) {
-      idleTime += now - lastActivityTime;
-    }
-    lastActivityTime = now;
   }
 
   function sendBehaviorData() {
     const currentTime = Date.now();
     const minutesElapsed = (currentTime - startTime) / (1000 * 60);
-    const wpm = wordCount / minutesElapsed;
+    const safeMinutesElapsed = minutesElapsed > 0 ? minutesElapsed : 1; // Prevent division by zero
+
+    const wpm = wordCount / safeMinutesElapsed;
     const avgLatency = keystrokeLatencies.length
       ? keystrokeLatencies.reduce((a, b) => a + b) / keystrokeLatencies.length
       : 0;
 
     const data = {
       wpm: wpm.toFixed(2),
-      keystrokeLatency: avgLatency.toFixed(2),
-      idleTime: Math.round(idleTime / 1000),
+      keystrokeLatency: avgLatency.toFixed(2)
     };
 
     console.log("Sending behavioral data:", data);
