@@ -67,3 +67,13 @@ fetch(`${apiBaseUrl}/test/${testId}`)
       <p style="color: red;">Failed to load the test. Please check the test ID.</p>
     `;
   });
+
+//working on the key strokes and mouse movement capture now
+
+//words per min
+
+//mouse movement patterns
+
+//keystroke latency, time between consecutive key presses
+
+//idle time and incativity

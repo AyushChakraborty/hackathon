@@ -14,7 +14,7 @@ def get_test(test_id):
         return jsonify({"error": "Test not found!"}), 404
     return jsonify(test)
 
-@api.route("/test/<test_id>/submit", methods=["POST"])
+@api.route("/test/<test_id>/submit", methods=["POST"])  #once the post is handled this will be active
 def submit_test(test_id):
     data = request.json
     submission = {
@@ -23,6 +23,6 @@ def submit_test(test_id):
     }
 
     db.responses.insert_one(submission)
-    
+    print(submission)
     print("Received answers:", data)
     return jsonify({"message": "Submission received"}), 200
