@@ -1,4 +1,4 @@
-function behavior() {
+export function behavior() {
   let wordCount = 0;
   let startTime = Date.now();
   let keyTimestamps = [];
