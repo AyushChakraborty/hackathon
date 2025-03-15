@@ -110,7 +110,7 @@ function startTest() {
         docElem.msRequestFullscreen();
       }
 
-     // Remove button after entering fullscreen
+      // Remove button after entering fullscreen
       fullScreenButton.remove();
 
       // ✅ Resolve the promise to continue execution
@@ -120,9 +120,10 @@ function startTest() {
 }
 
 // ✅ Only fetch the test **after** the promise resolves
-startTest().then(() => {
-  return fetch(`${apiBaseUrl}/test/${testId}`);
-})
+startTest()
+  .then(() => {
+    return fetch(`${apiBaseUrl}/test/${testId}`);
+  })
   .then((res) => {
     if (!res.ok) {
       console.error("Server returned status:", res.status);
@@ -178,14 +179,12 @@ startTest().then(() => {
     });
   })
 
-
   .catch((err) => {
     console.error("Failed to fetch test:", err);
     document.getElementById("questions-container").innerHTML = `
       <p style="color: red;">Failed to load the test. Please check the test ID.</p>
     `;
   });
-
 
 const form = document.getElementById("test-form");
 
