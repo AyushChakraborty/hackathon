@@ -1,3 +1,5 @@
+import { validUsername } from "./login.js";
+
 export function behavior() {
   let wordCount = 0;
   let startTime = null;
@@ -33,7 +35,7 @@ export function behavior() {
     sendBehaviorData(); // Send data immediately on focusout
   }
 
-  //for now only tracking wpm and keystroke latency, later will take input 
+  //for now only tracking wpm and keystroke latency, later will take input
   //from image model as another feature and use that all to predict
 
   function keydownHandler(e) {
@@ -68,7 +70,7 @@ export function behavior() {
     const data = {
       
       wpm: wpm.toFixed(2),
-      keystrokeLatency: avgLatency.toFixed(2)
+      keystrokeLatency: avgLatency.toFixed(2),
     };
 
     console.log("Sending behavioral data:", data);

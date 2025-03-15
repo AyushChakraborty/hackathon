@@ -21,7 +21,7 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
       localStorage.setItem("token", data.token);
       localStorage.setItem("username", username);
 
-      // Instead of hardcoding test_001
+      // Redirect to menu page
       window.location.href = "menu.html";
     } else {
       document.getElementById("login-message").textContent =
