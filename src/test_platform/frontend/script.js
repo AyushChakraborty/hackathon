@@ -9,6 +9,79 @@ if (!testId) {
   alert("Missing test ID in URL. Use ?test_id=your_test_id");
   throw new Error("Missing test_id");
 }
+
+// ✅ Function to save test progress whenever the user exits fullscreen
+function saveProgress() {
+  const answers = {};
+  document.querySelectorAll(".question input, .question textarea").forEach((el) => {
+    if (el.type === "radio") {
+      if (el.checked) answers[el.name] = el.value; // ✅ Saves selected option
+    } else {
+      answers[el.name] = el.value; // ✅ Saves text input values
+    }
+  });
+
+  // ✅ Store answers in localStorage
+  localStorage.setItem("testProgress", JSON.stringify(answers));
+}
+
+// ✅ Function to load test progress (only when restart button is clicked)
+function loadProgress() {
+  const savedAnswers = JSON.parse(localStorage.getItem("testProgress")) || {};
+  document.querySelectorAll(".question input, .question textarea").forEach((el) => {
+    if (el.type === "radio" && savedAnswers[el.name] === el.value) {
+      el.checked = true;  // ✅ Restores the selected radio button
+    } else if (el.type !== "radio" && savedAnswers[el.name]) {
+      el.value = savedAnswers[el.name];  // ✅ Restores text input values
+    }
+  });
+}
+
+// ✅ Function to handle fullscreen exit
+function handleFullscreenExit() {
+  if (!document.fullscreenElement) {
+    saveProgress();  // ✅ Auto-save progress when exiting fullscreen
+    alert("You have exited fullscreen mode! Click 'Restart Test' to continue.");
+
+    // ✅ Show the Restart Test button
+    const restartButton = document.createElement("button");
+    restartButton.textContent = "Restart Test";
+    restartButton.id = "restart-button";
+    restartButton.style.padding = "12px 20px";
+    restartButton.style.fontSize = "18px";
+    restartButton.style.margin = "20px auto";
+    restartButton.style.display = "block";
+    restartButton.style.cursor = "pointer";
+
+    document.body.appendChild(restartButton);
+
+    restartButton.addEventListener("click", function () {
+      // Enter fullscreen mode
+      const docElem = document.documentElement;
+      if (docElem.requestFullscreen) {
+        docElem.requestFullscreen();
+      } else if (docElem.mozRequestFullScreen) {
+        docElem.mozRequestFullScreen();
+      } else if (docElem.webkitRequestFullscreen) {
+        docElem.webkitRequestFullscreen();
+      } else if (docElem.msRequestFullscreen) {
+        docElem.msRequestFullscreen();
+      }
+
+     // Remove button after entering fullscreen
+      restartButton.remove();
+
+    });
+ 
+  }
+}
+
+// ✅ Listen for fullscreen exit event
+document.addEventListener("fullscreenchange", handleFullscreenExit);
+document.addEventListener("webkitfullscreenchange", handleFullscreenExit);
+document.addEventListener("mozfullscreenchange", handleFullscreenExit);
+document.addEventListener("MSFullscreenChange", handleFullscreenExit);
+
 function startTest() {
   return new Promise((resolve) => {
     // Create "Start Test" button
