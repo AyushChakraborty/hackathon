@@ -1,3 +1,4 @@
+import {tabSwitch} from "./tabSwitch.js"
 const apiBaseUrl = "http://127.0.0.1:5000";
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -67,6 +68,44 @@ fetch(`${apiBaseUrl}/test/${testId}`)
       <p style="color: red;">Failed to load the test. Please check the test ID.</p>
     `;
   });
+
+const form = document.getElementById("test-form");
+
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const answers = [];
+
+  const formData = new FormData(form);
+
+  for (let [key, value] of formData.entries()) {
+    answers.push({
+      question_id: key,
+      answer: value,
+    });
+  }
+
+  fetch(`${apiBaseUrl}/test/${testId}/submit`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ answers }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      document.getElementById("response-message").textContent = data.message;
+      document.getElementById("response-message").style.color = "green";
+    })
+    .catch((err) => {
+      console.error("Submission failed:", err);
+      document.getElementById("response-message").textContent =
+        "Failed to submit. Try again.";
+      document.getElementById("response-message").style.color = "red";
+    });
+});
+
+tabSwitch()
 
 //working on the key strokes and mouse movement capture now
 
