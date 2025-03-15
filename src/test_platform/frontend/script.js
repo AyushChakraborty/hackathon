@@ -1,3 +1,4 @@
+import {tabSwitch} from "./tabSwitch.js"
 const apiBaseUrl = "http://127.0.0.1:5000";
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -103,3 +104,5 @@ form.addEventListener("submit", function (e) {
       document.getElementById("response-message").style.color = "red";
     });
 });
+
+tabSwitch()
