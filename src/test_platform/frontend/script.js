@@ -1,4 +1,5 @@
-import {tabSwitch} from "./tabSwitch.js"
+import { tabSwitch } from "./tabSwitch.js";
+import { behavior } from "./behavior.js";
 const apiBaseUrl = "http://127.0.0.1:5000";
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -105,4 +106,5 @@ form.addEventListener("submit", function (e) {
     });
 });
 
-tabSwitch()
+tabSwitch();
+behavior();

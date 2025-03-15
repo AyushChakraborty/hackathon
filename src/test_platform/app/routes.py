@@ -26,3 +26,10 @@ def submit_test(test_id):
     
     print("Received answers:", data)
     return jsonify({"message": "Submission received"}), 200
+
+@api.route('/api/behavior', methods=['POST'])
+def log_behavior():
+    data = request.get_json()
+    print("Behavioral Data Received:", data)
+    # You can process/store here or hand off to another service
+    return jsonify({"status": "success"}), 200
