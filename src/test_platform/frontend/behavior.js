@@ -3,20 +3,17 @@ export function behavior() {
   let startTime = null;
   let keyTimestamps = [];
   let keystrokeLatencies = [];
-  let mouseMovements = [];
   let lastActivityTime = null;
   let idleTime = 0;
 
   const apiBaseUrl = "http://127.0.0.1:5000";
   let tracking = false;
-  let behaviorInterval = null;
   let idleInterval = null;
 
   function resetData() {
     wordCount = 0;
     keyTimestamps = [];
     keystrokeLatencies = [];
-    mouseMovements = [];
     idleTime = 0;
     startTime = Date.now();
     lastActivityTime = Date.now();
@@ -29,21 +26,20 @@ export function behavior() {
 
     document.addEventListener("keydown", keydownHandler);
     document.addEventListener("input", inputHandler);
-    document.addEventListener("mousemove", mousemoveHandler);
 
     idleInterval = setInterval(idleTimeHandler, 5000);
-    behaviorInterval = setInterval(sendBehaviorData, 60000);
   }
 
   function stopTracking() {
+    if (!tracking) return;
     tracking = false;
 
     document.removeEventListener("keydown", keydownHandler);
     document.removeEventListener("input", inputHandler);
-    document.removeEventListener("mousemove", mousemoveHandler);
 
     clearInterval(idleInterval);
-    clearInterval(behaviorInterval);
+
+    sendBehaviorData(); // Send data immediately on focusout
   }
 
   function keydownHandler(e) {
@@ -67,11 +63,6 @@ export function behavior() {
     lastActivityTime = Date.now();
   }
 
-  function mousemoveHandler(e) {
-    mouseMovements.push({ x: e.clientX, y: e.clientY, t: Date.now() });
-    lastActivityTime = Date.now();
-  }
-
   function idleTimeHandler() {
     const now = Date.now();
     if (now - lastActivityTime > 5000) {
@@ -91,7 +82,6 @@ export function behavior() {
     const data = {
       wpm: wpm.toFixed(2),
       keystrokeLatency: avgLatency.toFixed(2),
-      mouseMovements,
       idleTime: Math.round(idleTime / 1000),
     };
 
@@ -106,14 +96,14 @@ export function behavior() {
     resetData();
   }
 
-  // --- Only start tracking when text area is focused ---
+  // --- Start tracking on text area focus ---
   document.addEventListener("focusin", (e) => {
     if (e.target.classList.contains("text")) {
       startTracking();
     }
   });
 
-  // Optionally, stop tracking when focus is lost
+  // --- Stop and send data on focusout ---
   document.addEventListener("focusout", (e) => {
     if (e.target.classList.contains("text")) {
       stopTracking();
