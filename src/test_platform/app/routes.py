@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+import json
 from app.db import db
 from app.models import test_data
 
@@ -29,7 +30,12 @@ def submit_test(test_id):
 
 @api.route('/api/behavior', methods=['POST'])
 def log_behavior():
-    data = request.get_json()
-    print("Behavioral Data Received:", data)
+    activityData = request.get_json()
+
+    with open('activity.json', 'a') as f:
+        json.dump(activityData, f)
+        f.write('\n')
+
+    print("Behavioral Data Received:", activityData)
     # You can process/store here or hand off to another service
     return jsonify({"status": "success"}), 200
