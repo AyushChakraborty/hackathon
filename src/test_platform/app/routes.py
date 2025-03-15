@@ -52,9 +52,10 @@ def submit_test(test_id):
 def log_behavior():
     activityData = request.get_json()
 
-    with open('activity.json', 'a') as f:
-        json.dump(activityData, f)
-        f.write('\n')
+    # with open('activity.json', 'a') as f:
+    #     json.dump(activityData, f)
+    #     f.write('\n')
+    activity_collection.insert_one(activityData)
 
     print("Behavioral Data Received:", activityData)
     # You can process/store here or hand off to another service
