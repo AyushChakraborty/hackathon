@@ -66,6 +66,7 @@ export function behavior() {
       : 0;
 
     const data = {
+      
       wpm: wpm.toFixed(2),
       keystrokeLatency: avgLatency.toFixed(2)
     };

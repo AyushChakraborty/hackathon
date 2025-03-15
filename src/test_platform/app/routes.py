@@ -2,8 +2,14 @@ from flask import Blueprint, jsonify, request
 import json
 from app.db import db
 from app.models import test_data
+from pymongo import MongoClient
 
 api = Blueprint("api", __name__)
+client = MongoClient("mongodb://localhost:27017")
+
+activity_db = client["actitvity_db"]
+activity_collection = activity_db["activity"]
+
 
 db.tests.replace_one({"test_id": test_data["test_id"]}, test_data, upsert=True)
 
@@ -46,9 +52,11 @@ def submit_test(test_id):
 def log_behavior():
     activityData = request.get_json()
 
-    with open('activity.json', 'a') as f:
-        json.dump(activityData, f)
-        f.write('\n')
+    # with open('activity.json', 'w') as f:
+    #     json.dump(activityData, f)
+    #     f.write('\n')
+    activity_collection.insert_one(activityData)
+
 
     print("Behavioral Data Received:", activityData)
     # You can process/store here or hand off to another service
