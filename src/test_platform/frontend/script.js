@@ -1,5 +1,6 @@
 import { tabSwitch } from "./tabSwitch.js";
 import { behavior } from "./behavior.js";
+
 const apiBaseUrl = "http://127.0.0.1:5000";
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -13,40 +14,45 @@ if (!testId) {
 // ✅ Function to save test progress whenever the user exits fullscreen
 function saveProgress() {
   const answers = {};
-  document.querySelectorAll(".question input, .question textarea").forEach((el) => {
-    if (el.type === "radio") {
-      if (el.checked) answers[el.name] = el.value; // ✅ Saves selected option
-    } else {
-      answers[el.name] = el.value; // ✅ Saves text input values
-    }
-  });
+  document
+    .querySelectorAll(".question input, .question textarea")
+    .forEach((el) => {
+      if (el.type === "radio") {
+        if (el.checked) answers[el.name] = el.value;
+      } else {
+        answers[el.name] = el.value;
+      }
+    });
 
-  // ✅ Store answers in localStorage
   localStorage.setItem("testProgress", JSON.stringify(answers));
 }
 
 // ✅ Function to load test progress (only when restart button is clicked)
 function loadProgress() {
   const savedAnswers = JSON.parse(localStorage.getItem("testProgress")) || {};
-  document.querySelectorAll(".question input, .question textarea").forEach((el) => {
-    if (el.type === "radio" && savedAnswers[el.name] === el.value) {
-      el.checked = true;  // ✅ Restores the selected radio button
-    } else if (el.type !== "radio" && savedAnswers[el.name]) {
-      el.value = savedAnswers[el.name];  // ✅ Restores text input values
-    }
-  });
+  document
+    .querySelectorAll(".question input, .question textarea")
+    .forEach((el) => {
+      if (el.type === "radio" && savedAnswers[el.name] === el.value) {
+        el.checked = true;
+      } else if (el.type !== "radio" && savedAnswers[el.name]) {
+        el.value = savedAnswers[el.name];
+      }
+    });
 }
 
 // ✅ Function to handle fullscreen exit
 function handleFullscreenExit() {
   if (!document.fullscreenElement) {
-    document.querySelectorAll("input, textarea, button, select").forEach(el => {
-    el.disabled = true;
-    });
-    saveProgress();  // ✅ Auto-save progress when exiting fullscreen
+    document
+      .querySelectorAll("input, textarea, button, select")
+      .forEach((el) => {
+        el.disabled = true;
+      });
+
+    saveProgress();
     alert("You have exited fullscreen mode! Click 'Restart Test' to continue.");
 
-    // ✅ Show the Restart Test button
     const restartButton = document.createElement("button");
     restartButton.textContent = "Restart Test";
     restartButton.id = "restart-button";
@@ -59,7 +65,6 @@ function handleFullscreenExit() {
     document.body.appendChild(restartButton);
 
     restartButton.addEventListener("click", function () {
-      // Enter fullscreen mode
       const docElem = document.documentElement;
       if (docElem.requestFullscreen) {
         docElem.requestFullscreen();
@@ -70,19 +75,19 @@ function handleFullscreenExit() {
       } else if (docElem.msRequestFullscreen) {
         docElem.msRequestFullscreen();
       }
-      document.querySelectorAll("input, textarea, button, select").forEach(el => {
-      el.disabled = false;
-      });
 
-     // Remove button after entering fullscreen
+      document
+        .querySelectorAll("input, textarea, button, select")
+        .forEach((el) => {
+          el.disabled = false;
+        });
+
       restartButton.remove();
-
+      loadProgress(); // ✅ Restore progress after restarting
     });
- 
   }
 }
 
-// ✅ Listen for fullscreen exit event
 document.addEventListener("fullscreenchange", handleFullscreenExit);
 document.addEventListener("webkitfullscreenchange", handleFullscreenExit);
 document.addEventListener("mozfullscreenchange", handleFullscreenExit);
@@ -90,7 +95,6 @@ document.addEventListener("MSFullscreenChange", handleFullscreenExit);
 
 function startTest() {
   return new Promise((resolve) => {
-    // Create "Start Test" button
     const fullScreenButton = document.createElement("button");
     fullScreenButton.textContent = "Start Test (Full Screen)";
     fullScreenButton.id = "fullscreen-button";
@@ -102,9 +106,7 @@ function startTest() {
 
     document.body.appendChild(fullScreenButton);
 
-    // Button click event
     fullScreenButton.addEventListener("click", function () {
-      // Enter fullscreen mode
       const docElem = document.documentElement;
       if (docElem.requestFullscreen) {
         docElem.requestFullscreen();
@@ -116,18 +118,17 @@ function startTest() {
         docElem.msRequestFullscreen();
       }
 
-      // Remove button after entering fullscreen
       fullScreenButton.remove();
-
-      // ✅ Resolve the promise to continue execution
       resolve();
     });
   });
 }
 
-// ✅ Only fetch the test **after** the promise resolves
+// ✅ Only fetch test after fullscreen + tracking setup
 startTest()
   .then(() => {
+    tabSwitch();
+    behavior();
     return fetch(`${apiBaseUrl}/test/${testId}`);
   })
   .then((res) => {
@@ -184,7 +185,6 @@ startTest()
       questionsContainer.appendChild(questionDiv);
     });
   })
-
   .catch((err) => {
     console.error("Failed to fetch test:", err);
     document.getElementById("questions-container").innerHTML = `
@@ -198,7 +198,6 @@ form.addEventListener("submit", function (e) {
   e.preventDefault();
 
   const answers = [];
-
   const formData = new FormData(form);
 
   for (let [key, value] of formData.entries()) {
@@ -227,6 +226,3 @@ form.addEventListener("submit", function (e) {
       document.getElementById("response-message").style.color = "red";
     });
 });
-
-tabSwitch();
-behavior();
