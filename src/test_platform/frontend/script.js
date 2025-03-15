@@ -106,13 +106,3 @@ form.addEventListener("submit", function (e) {
 });
 
 tabSwitch()
-
-//working on the key strokes and mouse movement capture now
-
-//words per min
-
-//mouse movement patterns
-
-//keystroke latency, time between consecutive key presses
-
-//idle time and incativity
