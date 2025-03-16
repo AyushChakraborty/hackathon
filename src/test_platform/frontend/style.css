@@ -1,0 +1,99 @@
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #f2f4f8;
+  padding: 2rem;
+  margin: 0;
+}
+
+.container {
+  max-width: 750px;
+  margin: auto;
+  background: #ffffff;
+  padding: 2rem 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+h1,
+h2 {
+  text-align: center;
+  color: #333;
+}
+
+.question {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border-left: 4px solid #007bff;
+  background-color: #fdfdfd;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.question > label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #333;
+  font-size: 1.05rem;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.6rem;
+  padding-left: 0.5rem;
+}
+
+.option input[type="radio"] {
+  margin-right: 0.5rem;
+  cursor: pointer;
+}
+
+.option label {
+  cursor: pointer;
+  user-select: none;
+}
+
+textarea {
+  width: 100%;
+  resize: vertical;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-family: inherit;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: border-color 0.2s ease;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.15);
+}
+
+button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+#submit-button {
+  display: none;
+  margin: 2rem auto 1rem;
+  display: block;
+}
+
+#response-message {
+  text-align: center;
+  font-weight: 600;
+  margin-top: 1.5rem;
+}

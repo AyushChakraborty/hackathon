@@ -1,0 +1,45 @@
+body {
+  font-family: sans-serif;
+  padding: 2rem;
+  background-color: #f5f5f5;
+}
+
+#login-container,
+#dashboard {
+  max-width: 400px;
+  margin: auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+input,
+select,
+button {
+  display: block;
+  width: 100%;
+  padding: 0.6rem;
+  margin-top: 1rem;
+  font-size: 1rem;
+}
+
+.user-node {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #e0f7fa;
+  border-radius: 10px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* Hide risk details by default */
+.risk-details {
+  display: none;
+  margin-top: 0.5rem;
+}
+
+/* Show risk details only on hover */
+.user-node:hover .risk-details {
+  display: block;
+}
