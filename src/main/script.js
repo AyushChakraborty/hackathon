@@ -1,10 +1,4 @@
-const USERS = {
-  test1: [
-    { id: "user_123", risk: 0.2 },
-    { id: "user_456", risk: 0.7 },
-  ],
-  test2: [{ id: "user_789", risk: 0.1 }],
-};
+const API_BASE_URL = "http://127.0.0.1:5000";
 
 function login() {
   const username = document.getElementById("username").value;
@@ -18,16 +12,24 @@ function login() {
   }
 }
 
-function loadUsers(testId) {
+async function loadUsers(testId) {
   const container = document.getElementById("users-container");
   container.innerHTML = "";
 
-  if (!USERS[testId]) return;
+  try {
+    const response = await fetch(`${API_BASE_URL}/risk/testId=${testId}`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch risk score");
+    }
 
-  USERS[testId].forEach((user) => {
+    const risk = await response.text(); // or response.json() if backend sends a JSON number
+
     const div = document.createElement("div");
     div.className = "user-node";
-    div.innerHTML = `<strong>User ID:</strong> ${user.id}<br><strong>Risk Score:</strong> ${user.risk}`;
+    div.innerHTML = `<strong>Risk Score:</strong> ${risk}`;
     container.appendChild(div);
-  });
+  } catch (error) {
+    console.error("Error loading risk score:", error);
+    container.innerHTML = "Error loading risk score.";
+  }
 }

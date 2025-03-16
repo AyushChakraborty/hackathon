@@ -65,3 +65,8 @@ def log_behavior():
 def get_all_tests():
     tests = list(db.tests.find({}, {"_id": 0, "test_id": 1, "title": 1}))
     return jsonify(tests), 200
+
+
+@api.route("/risk/testId=<testId>", methods=["GET"])
+def send_risk():
+    return jsonify()
