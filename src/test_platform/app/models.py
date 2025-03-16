@@ -5,13 +5,19 @@ test_data = {
         {
             "id": "q1",
             "type": "mcq",
-            "question": "What's the capital of France?",
-            "options": ["Paris", "Berlin", "Rome", "Madrid"]
+            "question": "Which HTTP status code is returned when a browser makes a request using a method that the server does not support?",
+            "options": ["400 Bad Request", "403 Forbidden", "405 Method Not Allowed", "501 Not Implemented"]
         },
         {
             "id": "q2",
             "type": "text",
-            "question": "Explain why Paris is the capital of France."
+            "question": "why are ip addresses not unique?"
+        },
+        {
+            "id": "q3",
+            "type": "text",
+            "question": "Find the sum of maximum sub array of an array in O(n) complexity"
         }
+
     ]
 }
