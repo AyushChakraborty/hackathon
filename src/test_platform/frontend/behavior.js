@@ -81,14 +81,12 @@ export function behavior() {
     resetData();
   }
 
-  // --- Start tracking on text area focus ---
   document.addEventListener("focusin", (e) => {
     if (e.target.classList.contains("text")) {
       startTracking();
     }
   });
 
-  // --- Stop and send data on focusout ---
   document.addEventListener("focusout", (e) => {
     if (e.target.classList.contains("text")) {
       stopTracking();

@@ -2,13 +2,11 @@ const apiBaseUrl = "http://127.0.0.1:5000";
 const username = localStorage.getItem("username");
 document.getElementById("user").textContent = username || "User";
 
-// Optional: Protect route if no login
 if (!username || !localStorage.getItem("token")) {
   window.location.href = "login.html";
 }
 
 async function fetchTestList() {
-  // For now, fetch just one test (if more, you'll loop)
   const res = await fetch(`${apiBaseUrl}/test/test_001`);
   const test = await res.json();
 

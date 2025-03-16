@@ -4,7 +4,7 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const username = document.getElementById("username").value;
-  
+
   const password = document.getElementById("password").value;
 
   try {
@@ -17,7 +17,6 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
     const data = await response.json();
 
     if (response.ok) {
-      // Store token or session info
       localStorage.setItem("token", data.token);
       localStorage.setItem("username", username);
 

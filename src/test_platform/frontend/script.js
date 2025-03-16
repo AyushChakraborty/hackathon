@@ -13,7 +13,6 @@ if (!testId) {
   throw new Error("Missing test_id");
 }
 
-// ✅ Function to save test progress whenever the user exits fullscreen
 function saveProgress() {
   const answers = {};
   document
@@ -29,7 +28,6 @@ function saveProgress() {
   localStorage.setItem("testProgress", JSON.stringify(answers));
 }
 
-// ✅ Function to load test progress (only when restart button is clicked)
 function loadProgress() {
   const savedAnswers = JSON.parse(localStorage.getItem("testProgress")) || {};
   document
@@ -43,7 +41,6 @@ function loadProgress() {
     });
 }
 
-// ✅ Function to handle fullscreen exit
 function handleFullscreenExit() {
   if (!document.fullscreenElement) {
     document.getElementById("submit-button").style.display = "none";
@@ -117,7 +114,6 @@ function startTest() {
           .then(() => {
             fullScreenButton.remove();
 
-            // ✅ ✅ Show the submit button here!
             const submitBtn = document.getElementById("submit-button");
             if (submitBtn) {
               submitBtn.style.display = "block";
@@ -137,7 +133,6 @@ function startTest() {
   });
 }
 
-// ✅ Only fetch test after fullscreen + tracking setup
 startTest()
   .then(() => {
     tabSwitch();
