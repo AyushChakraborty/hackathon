@@ -6,6 +6,8 @@ const apiBaseUrl = "http://127.0.0.1:5000";
 const urlParams = new URLSearchParams(window.location.search);
 const testId = urlParams.get("test_id");
 
+document.getElementById("submit-button").style.display = "none";
+
 if (!testId) {
   alert("Missing test ID in URL. Use ?test_id=your_test_id");
   throw new Error("Missing test_id");
@@ -44,6 +46,10 @@ function loadProgress() {
 // ✅ Function to handle fullscreen exit
 function handleFullscreenExit() {
   if (!document.fullscreenElement) {
+    console.log("Fullscreen exited");
+
+    document.getElementById("submit-button").style.display = "none";
+
     document
       .querySelectorAll("input, textarea, button, select")
       .forEach((el) => {
@@ -62,19 +68,13 @@ function handleFullscreenExit() {
     restartButton.style.display = "block";
     restartButton.style.cursor = "pointer";
 
+    console.log("Restart button added");
+
     document.body.appendChild(restartButton);
 
     restartButton.addEventListener("click", function () {
       const docElem = document.documentElement;
-      if (docElem.requestFullscreen) {
-        docElem.requestFullscreen();
-      } else if (docElem.mozRequestFullScreen) {
-        docElem.mozRequestFullScreen();
-      } else if (docElem.webkitRequestFullscreen) {
-        docElem.webkitRequestFullscreen();
-      } else if (docElem.msRequestFullscreen) {
-        docElem.msRequestFullscreen();
-      }
+      docElem.requestFullscreen?.();
 
       document
         .querySelectorAll("input, textarea, button, select")
@@ -82,8 +82,9 @@ function handleFullscreenExit() {
           el.disabled = false;
         });
 
+      document.getElementById("submit-button").style.display = "block";
       restartButton.remove();
-      loadProgress(); // ✅ Restore progress after restarting
+      loadProgress();
     });
   }
 }
@@ -94,7 +95,7 @@ document.addEventListener("mozfullscreenchange", handleFullscreenExit);
 document.addEventListener("MSFullscreenChange", handleFullscreenExit);
 
 function startTest() {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const fullScreenButton = document.createElement("button");
     fullScreenButton.textContent = "Start Test (Full Screen)";
     fullScreenButton.id = "fullscreen-button";
@@ -108,18 +109,35 @@ function startTest() {
 
     fullScreenButton.addEventListener("click", function () {
       const docElem = document.documentElement;
-      if (docElem.requestFullscreen) {
-        docElem.requestFullscreen();
-      } else if (docElem.mozRequestFullScreen) {
-        docElem.mozRequestFullScreen();
-      } else if (docElem.webkitRequestFullscreen) {
-        docElem.webkitRequestFullscreen();
-      } else if (docElem.msRequestFullscreen) {
-        docElem.msRequestFullscreen();
-      }
 
-      fullScreenButton.remove();
-      resolve();
+      const fullScreenPromise =
+        docElem.requestFullscreen?.() ||
+        docElem.mozRequestFullScreen?.() ||
+        docElem.webkitRequestFullscreen?.() ||
+        docElem.msRequestFullscreen?.();
+
+      if (fullScreenPromise) {
+        fullScreenPromise
+          .then(() => {
+            fullScreenButton.remove();
+
+            // ✅ ✅ Show the submit button here!
+            const submitBtn = document.getElementById("submit-button");
+            if (submitBtn) {
+              submitBtn.style.display = "block";
+              console.log("Submit button shown");
+            }
+
+            resolve();
+          })
+          .catch((err) => {
+            console.error("Fullscreen failed:", err);
+            reject(err);
+          });
+      } else {
+        alert("Fullscreen API not supported");
+        reject(new Error("Fullscreen API not supported"));
+      }
     });
   });
 }
