@@ -6,6 +6,6 @@ users_collection = db["users"]
 
 # Insert dummy users (only run once)
 users_collection.insert_many([
-    {"username": "admin", "password": "password123"},
+    {"username": "user1", "password": "password123"},
     {"username": "testuser", "password": "secure456"}
 ])
