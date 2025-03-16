@@ -29,4 +29,17 @@ button {
   padding: 1rem;
   background: #e0f7fa;
   border-radius: 10px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* Hide risk details by default */
+.risk-details {
+  display: none;
+  margin-top: 0.5rem;
+}
+
+/* Show risk details only on hover */
+.user-node:hover .risk-details {
+  display: block;
 }

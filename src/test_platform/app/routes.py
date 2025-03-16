@@ -80,6 +80,6 @@ def get_all_tests():
     return jsonify(tests), 200
 
 
-@api.route("/risk/testId=<testId>", methods=["GET"])
+@api.route("/risk", methods=["GET"])
 def send_risk():
     return jsonify(model_output), 200
