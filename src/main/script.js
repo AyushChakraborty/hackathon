@@ -21,14 +21,14 @@ async function loadUser() {
     const response = await fetch(`${API_BASE_URL}/risk`);
     if (!response.ok) throw new Error("Failed to fetch risk scores");
 
-    const riskScores = await response.json(); // Expecting [0.2, 0.3, 0.6]
-
+    const riskScores = await response.json(); 
+    console.log(riskScores);
     const div = document.createElement("div");
     div.className = "user-node";
     const labels = ["Low Risk", "Medium Risk", "High Risk"];
 
     div.innerHTML = `
-  <strong>User ID:</strong> user_001
+  <strong>User ID:</strong> user_0s01
   <div class="risk-details">
     <strong>Risk Scores:</strong>
     <ul>
