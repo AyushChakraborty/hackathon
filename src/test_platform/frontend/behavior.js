@@ -1,5 +1,3 @@
-import { validUsername } from "./login.js";
-
 export function behavior() {
   let wordCount = 0;
   let startTime = null;
@@ -68,7 +66,6 @@ export function behavior() {
       : 0;
 
     const data = {
-      
       wpm: wpm.toFixed(2),
       keystrokeLatency: avgLatency.toFixed(2),
     };
