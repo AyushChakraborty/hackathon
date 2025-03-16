@@ -46,8 +46,6 @@ function loadProgress() {
 // ✅ Function to handle fullscreen exit
 function handleFullscreenExit() {
   if (!document.fullscreenElement) {
-    console.log("Fullscreen exited");
-
     document.getElementById("submit-button").style.display = "none";
 
     document
@@ -67,8 +65,6 @@ function handleFullscreenExit() {
     restartButton.style.margin = "20px auto";
     restartButton.style.display = "block";
     restartButton.style.cursor = "pointer";
-
-    console.log("Restart button added");
 
     document.body.appendChild(restartButton);
 
@@ -125,7 +121,6 @@ function startTest() {
             const submitBtn = document.getElementById("submit-button");
             if (submitBtn) {
               submitBtn.style.display = "block";
-              console.log("Submit button shown");
             }
 
             resolve();
