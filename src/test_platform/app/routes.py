@@ -55,6 +55,7 @@ def log_behavior():
     # with open('activity.json', 'a') as f:
     #     json.dump(activityData, f)
     #     f.write('\n')
+    activity_collection.delete_many({})  #getting rid of the previous data, only the new data will be stored
     activity_collection.insert_one(activityData)
 
     print("Behavioral Data Received:", activityData)
