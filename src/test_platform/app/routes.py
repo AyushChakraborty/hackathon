@@ -12,10 +12,6 @@ sys.path.append(src_path)
 from model import model
 
 api = Blueprint("api", __name__)
-# client = MongoClient("mongodb://localhost:27017")
-
-# activity_db = client["actitvity_db"]
-# activity_collection = activity_db["activity"]
 
 model_output = []   #essentilly makes it global
 
@@ -61,17 +57,10 @@ def log_behavior():
     global model_output
     activityData = request.get_json()
 
-    # with open('activity.json', 'a') as f:
-    #     json.dump(activityData, f)
-    #     f.write('\n')
-    # activity_collection.delete_many({})  #getting rid of the previous data, only the new data will be stored
-    # activity_collection.insert_one(activityData)
-
     #call the model func right here
     model_output = model(activityData)  #returns the probabilities of the classes in list form 
 
     print("Behavioral Data Received:", activityData)
-    # You can process/store here or hand off to another service
     print("model output:", model_output)
     return jsonify({"status": "success"}), 200
 

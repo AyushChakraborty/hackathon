@@ -17,11 +17,9 @@ def model(X):
     W4 = checkpoint['W4']
     b4 = checkpoint['b4']
 
-    # entry = activity_collection.find_one(sort=[("_id", -1)])
     wpm = float(X["wpm"])
     keystroke_latency = float(X["keystrokeLatency"])
     X = torch.tensor([wpm, keystroke_latency], dtype=torch.float32).view(-1, 2)
-    # print(X.shape)
 
     parameters = [W1, b1, W2, b2, W3, b3, W4, b4]
 
